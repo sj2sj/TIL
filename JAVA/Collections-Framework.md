@@ -159,6 +159,6 @@ Map map = new HashMap();
 Iterator iterator = map.entrySet().iterator();
 ~~~
 
-<br>
+<br/> <hr> <br/>
 
 남궁성, *자바의 정석* 책과 강의를 정리한 문서입니다.
