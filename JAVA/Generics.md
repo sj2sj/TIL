@@ -64,6 +64,7 @@ class FruitBox<T extends Fruit & Eatable> {...}
 <br/> <hr> <br/>
 
 ## 4. 와일드 카드
+
 > 하나의 참조변수로 대입된 타입이 다른 객체를 참조할 수 있게 하는 것
 - 사용법
 ~~~
@@ -82,6 +83,41 @@ static Juice makeJuice(FruitBox<? extends Fruit> box) {
     ...
 }
 ~~~
+
+<br/> <hr> <br/>
+
+## 5. 지네릭 메서드
+> 지네릭 타입이 선언된 메서드 (타입 변수는 메서드 내에서만 유효함) <br/>
+- 클래스의 타입 매개변수 `<T>`와 메서드의 타입 매개변수 `<T>`는 별개
+- 메서드를 호출할 때 마다 타입을 대입해야 함 **(대부분 생략가능)**
+
+
+<br/> <hr> <br/>
+
+## 6. 지네릭 타입의 형변환
+- 지네릭 타입과 원시 타입 간의 형변환 (가능, 하지만 경고. 바람직하지 않음)
+~~~java
+Box box = null; //원시 타입
+Box<Object> objBox = null; //지네릭 타입
+
+box = (Box)objBox; //OK, 지네릭 -> 원시
+objBox = (Box<Object>)box; //OK, 원시 -> 지네릭
+~~~
+
+<br/>
+
+- 대입된 타입이 다른 지네릭 타입 간의 형변환
+~~~java
+Box<Object> objBox = null;
+Box<String> strBox = null;
+
+objBox = (Box<Object>)strBox; //에러
+strBox = (Box<String>)objBox; //에러
+
+/* 와일드 카드를 사용하면 가능 */
+Box<? extends Object> wBox = new Box<String>(); //형변환 OK
+~~~
+
 
 <br/> <hr> <br/>
 
