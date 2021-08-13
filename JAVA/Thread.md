@@ -84,6 +84,23 @@ WAITING, TIMED_WAITING: 쓰레드의 작업이 종료되지는 않았으나, 실
 TERMINATED: 쓰레드의 작업이 종료된 상태
 ~~~
 
+<br/>
+
+### (2) 쓰레드의 스케줄링과 관련된 메서드
+1. sleep(long millis) - 일정시간동안 쓰레드를 멈추게 함
+~~~java
+static void sleep(long millis)
+static void sleep(long millis, int nanos)
+
+try {
+    Thread.sleep(1000) //쓰레드를 1초동안 멈추게 한다. 
+} catch(InterruptedException e) {}
+~~~
+- sleep()에 의해 일시정지가 된 쓰레드는 지정된 시간이 다 되거나 interrupt()가 호출되면 InterruptedException 예외가 발생하고, 실행대기 상태가 된다. <br/>
+--> 따라서 *try-catch*문으로 예외처리 필요
+- sleep()은 항상 현재 실행중인 쓰레드에 대해 작동하기 때문에, th1.sleep(1000) 으로 호출해도 실제 영향을 받는 것은 현재 실행중인 쓰레드이다. <br/>
+--> 따라서 *Thread.sleep(1000)* 과 같이 사용해야한다.
+
 <br/> <hr> <br/>
 
 
