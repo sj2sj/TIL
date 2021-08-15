@@ -101,6 +101,27 @@ try {
 - sleep()은 항상 현재 실행중인 쓰레드에 대해 작동하기 때문에, th1.sleep(1000) 으로 호출해도 실제 영향을 받는 것은 현재 실행중인 쓰레드이다. <br/>
 --> 따라서 *Thread.sleep(1000)* 과 같이 사용해야한다.
 
+<br/>
+
+2. interrupt() / interrupted() - 쓰레드의 작업을 취소함
+> 쓰레드가 sleep(), wait(), join()에 의해 일시정지 상태(WATING)에 있을 때, 해당 쓰레드에 대해 interrupt()를 호출하면, Interrupted Exception이 발생하고 실행대기 상태(RUNNABLE)로 바뀐다.
+- 진행중인 쓰레드의 작업이 끝나기 전에 취소한다.
+- interrupt()는 쓰레드의 작업을 멈추는 것이 아니라 멈춰달라고 요청만 하는 것이다.
+- interrupt()를 호출하면 쓰레드의 interrupted상태를 변경시킨다.
+- interrupted()는 쓰레드애 대해 interrupt()가 호출 되었는지 알려준다. 호출되었다면 true, 호출되지 않았다면 false를 반환한다.
+
+<br/>
+
+3. suspend(), resume(), stop()
+> suspend()와 stop()이 교착상태(deadlock)를 일으키기 쉽게 작성되어있으므로 사용이 권장되지 않음.
+- suspend(): sleep()처럼 쓰레드를 멈추게 함
+- resume(): suspend()에 의해 정지된 쓰레드를 다시 실행대기 상태로 만듦
+- stop(): 호출되는 즉시 쓰레드가 종료
+
+<br/>
+
+
+
 <br/> <hr> <br/>
 
 
