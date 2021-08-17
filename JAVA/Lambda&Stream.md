@@ -268,7 +268,48 @@ Stream emptySteam = Stream.empty();
 ### (2) 스트림의 중간 연산
 > 연산결과가 스트림인 연산, `반복적으로 적용` 가능
 
+<br/>
 
+#### **a. 스트림 자르기 - skip(), limit()**
+- 스트림의 일부를 잘라낼 때 사용한다.
+    * Stream\<T> skip(long n)
+    * Stream(T) limit(long maxSize)
+~~~java
+IntStream intStream = IntStream.rangeClosed(1, 10); //1~10을 가진 스트림
+
+//앞의 3개 요소를 skip하고, 스트림의 요소를 5개로 제한함
+intStream.skip(3).limit(5).forEach(System.out::print); //45678
+~~~
+
+<br/>
+
+#### **b. 스트림의 요소 걸러내기 - filter(), distinct**
+- `distinct()`: 스트림에서 중복 요소 제거
+    * Stream\<T> distinct()
+- `filter()`: 주어진 조건에 맞지 않는 요소를 걸러냄 (조건식에 맞는 요소가 반환됨)
+    * Stream\<T> filter(Predicate\<? super T> predicate)
+~~~java
+//distinct()
+IntStream intStream = IntStream.of(1, 2, 2, 3, 3, 3, 4, 5, 5, 6);
+IntStream.distinct().forEach(System.out::print); //123456
+
+//filter() - 매개변수로 람다식 사용 가능
+IntStream intStream = IntStream.rangeClosed(1, 10) //1~10
+intStream.filter(i -> i%2 == 0).forEach(System.out::print); //246810 (짝수만 반환)
+~~~
+
+<br/>
+
+#### **c. 정렬 - sorted**
+- 스트림을 정렬할 때 사용한다.
+    * Stream\<T> sorted() : 기본 정렬(Comparable)
+    * Stream\<T> sorted(Comparator\<? super T> comparator)
+~~~java
+Stream<String> strStream = Stream.of("dd", "aaa", "CC", "cc", "b");
+strStream.sorted().forEach(System.out::print); //CCaaabccdd
+~~~
+
+<br/>
 
 <br/> <hr> <br/>
 
