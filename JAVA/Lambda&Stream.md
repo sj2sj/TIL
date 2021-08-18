@@ -300,7 +300,7 @@ intStream.filter(i -> i%2 == 0).forEach(System.out::print); //246810 (짝수만 
 
 <br/>
 
-#### **c. 정렬 - sorted**
+#### **c. 정렬 - sorted()**
 - 스트림을 정렬할 때 사용한다.
     * Stream\<T> sorted() : 기본 정렬(Comparable)
     * Stream\<T> sorted(Comparator\<? super T> comparator)
@@ -311,10 +311,116 @@ strStream.sorted().forEach(System.out::print); //CCaaabccdd
 
 <br/>
 
+#### **d. 변환 - map()**
+- 스트림의 요소를 변환하거나 원하는 요소를 뽑아내는 메서드
+    * Stream\<R> map(Function\<? super T, ? extends R> mapper)
+~~~java
+/* map()을 사용하여 Stream<File>을 Stream<String>으로 변경하고, 파일 이름만 추출하는 예제 */
+Stream<File> fileStream = Stream.of(new File("Ex1.java"), new File("Ex1"), new File("Ex1.bak"), new File("Ex2.java"), new File("Ex1.txt"));
+
+//map()으로 Stream<File>을 Stream<String>으로 변환
+Stream<String> filenameStream = fileStream.map(File::getName); //File참조변수 (f) -> f.getName()
+filenameStream.forEach(System.out::println); //스트림의 모든 파일을 출력한다.
+
+//map()은 중간연산이므로 여러 번 사용 가능.
+fileStream.map(File::getName) //Stream<File> -> Stream<String>
+.filter(s -> s.indexOf('.') != -1) //확장자 없는 것은 제외
+.map(s -> s.substring(s.indexOf('.')+1)) //Stream<String> -> Stream<String>
+.map(String::toUpperCase) //모두 대문자로 변환함
+.distinct() //중복 제거
+.forEach(System.out::print); //모두 출력
+~~~
+
+<br/>
+
+#### **e. 조회 - peek()**
+- 스트림의 요소를 소비하지 않고 조회
+- 연산과 연산 사이에 올바르게 처리되고 있는지 확인하고 싶을 때 사용
+~~~java
+fileStream.map(File::getName)
+.filter(s -> s.indexOf('.') != -1)
+.peek(s -> System.out.printf("filename = %s%n", s)) //파일명 출력
+.map(s -> s.substring(s.indexOf('.')+1)) //확장자만 추출
+.peek(s -> System.out.printf("extension = %s%n", s)) //확장자 출력
+.forEach(System.out::println); //모두 출력
+~~~
+
+<br/>
+
+#### **f. 스트림의 스트림을 스트림으로 변환 - flatMap()**
+- 스트림의 요소가 배열이거나 map()의 연산결과가 배열인 경우, 즉 스트림의 타입이 Stream\<T[]>인 경우,`Stream\<T>`로 다루기 위해 사용한다.
+~~~java
+//문자열 배열 스트림
+Stream<String[]> strArrStream = Stream.of(
+    new String[]{"abc", "def", "ghi"},
+    , new String[]{"ABC", "GHI", "JKLMN"}
+);
+
+//문자열들을 합쳐서 Stream<String>으로 만든다.
+Stream<String> strStream = strArrStream.flatMap(Arrays::stream);
+~~~
+
+
 <br/> <hr> <br/>
 
-### (3) 스트림의 최종 연산
+### (3) Optional\<T>
+> T타입 객체의 래퍼클래스
+- NULL을 직접 다루는 것은 위험함 (NullPointerException)
+- NULL 체크를 하면 코드가 지저분해짐 (if문 필수)
+~~~java
+public final class Optional<T> {
+    private final T value; //T타입의 참조변수
+    ...
+}
+~~~
+
+<br/>
+
+#### **객체 생성**
+~~~java
+String str = "abc";
+Optional<String> optVal = Optional.of(str);
+Optional<String> optVal = Optional.of("abc");
+Optional<String> optVal = Optional.of(null); //NullPointerException!!
+Optional<String> optVal = Optional.ofNullable(null); //OK!
+
+/* null 대신 빈 Optional<String> 객체 사용 */
+Optional<String> optVal = null; //null로 초기화는 바람직하지 않음
+Optional<String> optVal = Optional.<String>empty(); //빈 객체로 초기화.
+~~~
+
+<br/>
+
+#### **객체의 값 가져오기 - get(), 🌟 orElse(), 🌟 orElseGet(), orElseThrow()**
+~~~java
+Optional<String> optVal = Optional.of("abc");
+String str1 = optVal.get(); //optVal에 저장된 값 반환, null이면 예외 발생함
+String str2 = optVal.orElse(""); //optVal에 저장된 값이 null이면, ""를 반환
+String str3 = optVal.orElseGet(String::new); //람다식 사용 가능 () -> new String()
+String str4 = optVal.orElseThrow(NullPointerException::new); //null이면 예외 발생
+~~~
+
+<br/>
+
+#### **isPresent() - Optional객체의 값이 null이면 false, 아니면 true 반환**
+~~~java
+if(Optional.ofNullable(str).isPresent()) { //if(str != null)
+    System.out.println(str);
+}
+~~~
+
+<br/> <hr> <br/>
+
+### (4) 스트림의 최종 연산
 > 연산결과가 스트림이 아닌 연산, `단 한번만 적용` 가능 (스트림의 요소를 소모함)
+
+<br/> <hr> <br/>
+
+### (5) collect() / Collecter
+
+<br/> <hr> <br/>
+
+
 
 <br/> <hr> <br/>
 
