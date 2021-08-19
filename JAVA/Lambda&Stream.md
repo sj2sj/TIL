@@ -1,20 +1,24 @@
 <br/>
 
-### **목차**
-
-[람다와 스트림 (Lambda & Stream)](#---------lambda---stream-)
-* [1. 람다식 (Lambda expression)](#1------lambda-expression-)
-* [2. 스트림 (Stream)](#2------stream-)
-    + [(1) 스트림 만들기](#-1---------)
-    + [(2) 스트림의 중간 연산](#-2------------)
-    + [(3) Optional\<T>](#-3--optional--t-)
-    + [(4) 스트림의 최종 연산](#-4------------)
-    + [(5) collect() / Collector / Collecters](#-5--collect-----collector---collecters)
-
-<br/> <hr> <br/>
 
 
 # 람다와 스트림 (Lambda & Stream)
+
+## **목차**
+- [1. 람다식 (Lambda expression)](#1------lambda-expression-)
+  * [(1) 람다식 작성 방법](#-1-----------)
+  * [(2) 함수형 인터페이스 (Functional Interface)](#-2-------------functional-interface-)
+  * [(3) java.util.function 패키지](#-3--javautilfunction----)
+  * [(4) 메서드 참조](#-4--------)
+- [2. 스트림 (Stream)](#2------stream-)
+  * [(1) 스트림 만들기](#-1---------)
+  * [(2) 스트림의 중간 연산](#-2------------)
+  * [(3) Optional\<T>](#-3--optional--t-)
+  * [(4) 스트림의 최종 연산](#-4------------)
+  * [(5) collect() / Collector / Collecters](#-5--collect-----collector---collecters)
+
+
+<br/> <hr> <br/>
 
 ## 1. 람다식 (Lambda expression)
 > 메서드를 하나의 식으로 표현한 것 (=익명 함수)
