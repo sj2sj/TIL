@@ -5,17 +5,17 @@
 # 람다와 스트림 (Lambda & Stream)
 
 ## **목차**
-- [1. 람다식 (Lambda expression)](#1------lambda-expression-)
-  * [(1) 람다식 작성 방법](#-1-----------)
-  * [(2) 함수형 인터페이스 (Functional Interface)](#-2-------------functional-interface-)
-  * [(3) java.util.function 패키지](#-3--javautilfunction----)
-  * [(4) 메서드 참조](#-4--------)
-- [2. 스트림 (Stream)](#2------stream-)
-  * [(1) 스트림 만들기](#-1---------)
-  * [(2) 스트림의 중간 연산](#-2------------)
-  * [(3) Optional\<T>](#-3--optional--t-)
-  * [(4) 스트림의 최종 연산](#-4------------)
-  * [(5) collect() / Collector / Collecters](#-5--collect-----collector---collecters)
+- [1. 람다식 (Lambda expression)](#1-람다식-lambda-expression)
+  * [(1) 람다식 작성 방법](#1-람다식-작성-방법)
+  * [(2) 함수형 인터페이스 (Functional Interface)](#2-함수형-인터페이스-functional-interface)
+  * [(3) java.util.function 패키지](#3-javautilfunction-패키지)
+  * [(4) 메서드 참조](#4-메서드-참조)
+- [2. 스트림 (Stream)](#2-스트림-stream)
+  * [(1) 스트림 만들기](#1-스트림-만들기)
+  * [(2) 스트림의 중간 연산](#2-스트림의-중간-연산)
+  * [(3) Optional\<T>](#3-optionalt)
+  * [(4) 스트림의 최종 연산](#4-스트림의-최종-연산)
+  * [(5) collect() / Collector / Collectors](#5-collect--collector--collectors)
 
 
 <br/> <hr> <br/>
@@ -480,7 +480,7 @@ U reduce(U identity, BiFunction<U, T, U> accmulator, BinaryOperator<U> combiner)
 
 <br/> <hr> <br/>
 
-### (5) collect() / Collector / Collecters
+### (5) collect() / Collector / Collectors
 - `collect()`: Collector를 매개변수로 하는 스트림의 `최종연산`
 ~~~java
 Object collect(Collector collector) //Collector를 구현한 클래스의 객체를 매개변수로 사용
