@@ -1,3 +1,18 @@
+<br/>
+
+### **목차**
+
+[람다와 스트림 (Lambda & Stream)](#---------lambda---stream-)
+* [1. 람다식 (Lambda expression)](#1------lambda-expression-)
+* [2. 스트림 (Stream)](#2------stream-)
+    + [(1) 스트림 만들기](#-1---------)
+    + [(2) 스트림의 중간 연산](#-2------------)
+    + [(3) Optional\<T>](#-3--optional--t-)
+    + [(4) 스트림의 최종 연산](#-4------------)
+    + [(5) collect() / Collector / Collecters](#-5--collect-----collector---collecters)
+
+<br/> <hr> <br/>
+
 
 # 람다와 스트림 (Lambda & Stream)
 
@@ -414,12 +429,157 @@ if(Optional.ofNullable(str).isPresent()) { //if(str != null)
 ### (4) 스트림의 최종 연산
 > 연산결과가 스트림이 아닌 연산, `단 한번만 적용` 가능 (스트림의 요소를 소모함)
 
+<br/>
+
+#### **a. 스트림의 모든 요소에 지정된 작업을 수행 - forEach(), forEachOrdered()**
+~~~java
+void forEach(Consumer<? super T> action) //병렬스트림인 경우 순서 보장 X
+void forEachOrdered(Consumer<? super T> action) //병렬스트림인 경우에도 순서 보장 O
+~~~
+
+<br/>
+
+#### **b. 조건 검사 - allMatch(), anyMatch(), noneMatch()**
+~~~java
+boolean allMatch (Predicate<? super T> predicate) //모든 요소가 조건을 만족시키면 true
+boolean anyMatch (Predicate<? super T> predicate) //한 요소라도 조건을 만족시키면 true
+boolean noneMatch (Predicate<? super T> predicate) //모든 요소가 조건을 만족시키지 않으면 true
+~~~
+#### **조건에 일치하는 요소 찾기 - findFirst(), findAny()**
+~~~java
+Optional<T> findFirst() //첫 번째 요소를 반환. 순차 스트림에 사용
+Optional<T> findAny() //아무거나 하나를 반환. 병렬 스트림에 사용
+~~~
+
+<br/>
+
+#### **c. 통계 - count(), sum(), average(), max(), min()**
+- 대부분의 경우 이 메서드를 사용하지 않고, 기본형 스트림으로 변환하거나, reduce()와 collect()를 사용하여 통계를 얻는다.
+~~~java
+long count()
+Optional<T> max(Comparator<? super T> comparator)
+Optional<T> min(Comparator<? super T> comparator)
+~~~
+
+<br/>
+
+#### **d. 스트림의 요소를 하나씩 줄여가며 누적 연산 - reduce()**
+~~~java
+Optinaol<T> reduce(BinaryOperator<T> accumulator)
+~~~
+~~~java
+/* 초기값(identity)을 가지는 reduce() */
+// 스트림의 요소가 하나도 없는 경우, 초기값이 반환되기 때문에 반환 타입이 T이다.
+T reduce(T identity, BinaryOperator<T> accmulator)
+U reduce(U identity, BiFunction<U, T, U> accmulator, BinaryOperator<U> combiner)
+~~~
+
 <br/> <hr> <br/>
 
-### (5) collect() / Collecter
+### (5) collect() / Collector / Collecters
+- `collect()`: Collector를 매개변수로 하는 스트림의 `최종연산`
+~~~java
+Object collect(Collector collector) //Collector를 구현한 클래스의 객체를 매개변수로 사용
+~~~
 
-<br/> <hr> <br/>
+<br/>
 
+- `Collector`: 수집(collect)에 필요한 메서드를 정의해 놓은 `인터페이스`
+~~~java
+public interface Collector<T, A, R> { //T(요소)를 A에 누적 -> 결과를 R로 변환 후 반환
+    Supplier<A> supplier(); //StringBuilder::new - 누적할 곳
+    BiConsumer<A, T> accumulator(); //accumulator(); //(sb, s) -> sb.append(s) 누적방법
+    BinaryOperator<A> combiner(); //(sb1, sb2) -> sb1.append(sb2) 결합방법(병렬)
+    Function<A, R> finisher(); //sb -> sb.toString()
+    Set<Characteristics> characteristics(); //Collector의 특성이 담긴 Set을 반환
+    ...
+}
+~~~
+
+<br/>
+
+- `Collectors`: 다양한 기능의 컬렉터(Collector를 구현한 클래스)를 제공하는 `클래스`
+    * 변환 - mapping(), toList(), toSet(), toMap(), toCollection(), ...
+    * 통계 - counting(), summingInt(), averageingInt(), maxBy(), minBy(), ...
+    * 문자열 결합 - joining()
+    * 리듀싱 - reducing()
+    * 그룹화와 분할 - groupingBy(), partitioningBy(), collectingAndThen()
+
+<br/>
+
+#### **a. 스트림을 컬렉션, 배열로 변환**
+- 컬렉션으로 변환 : toList(), toSet(), toMap(), toCollection()
+~~~java
+//toList()
+List<String> names = stuStream.map(Student::getName).collect(Collectors.toList());
+
+//toCollection()
+ArrayList<String> list = names.stream().collect(Collectors.toCollection(ArrayList::new));
+
+//toMap() -키와 값을 쌍으로 저장해야함
+//Person의 주민등록번호를 key로 하고, Person객체를 value로 저장
+Map<String, Person> map = personStream.collect(Collectors.toMap(p -> p.getRegId(), p -> p));
+~~~
+
+<br/>
+
+- 배열로 변환 : toArry()
+    * 해당 타입의 생성자 참조를 매개변수로 지정해주어야 함
+    * 매개변수가 없을 경우 Object[]를 반환
+~~~java
+//toArray()
+Student[] stuNames = studentStream.toArray(Student[]::new);
+~~~
+
+<br/>
+
+
+#### **b. 스트림의 통계**
+- counting(), summingInt(), maxBy(), minBy(), ...
+~~~java
+//counting()
+long count = stuStream.collect(Collectors.counting());
+
+//summingInt()
+long totalScore = stuStream.collect(summingInt(Student::getTotalScore)); //그룹별 sum
+
+//maxBy()
+Optional<Student> topStudent = stuStream.collect(maxBy(Comparator.comparingInt(Student::getTotalScore)));
+~~~
+
+<br/>
+
+#### **c. 스트림의 리듀싱 - reducing()**
+~~~java
+Collector reducing(BinaryOperator<T> op)
+Collector reducing(T identity, BinaryOperator<T> op)
+Collector reducing(U identity, Function<T, U> mapper, BinaryOperator<T> op)
+~~~
+
+<br/>
+
+#### **d. 문자열 스트림의 요소를 모두 연결 - joining()**
+~~~java
+String studentNames = stuStream.map(Student::getName).collect(joining());
+String studentNames = stuStream.map(Student::getName).collect(joining(",")); //구분자
+~~~
+
+<br/>
+
+#### **e. 그룹화 - groupingBy() : n분할**
+~~~java
+Collector groupingBy(Function classifier)
+Collector groupingBy(Function classifier, Collector downstream)
+Collector groupingBy(Function classifier, Supplier mapFactory, Collector downstream)
+~~~
+
+<br/>
+
+#### **f. 분할 - partitioningBy() : 2분할**
+~~~java
+Collector partitioningBy(Predicate predicate)
+Collector partitioningBy(Predicate predicate, Collector downstream)
+~~~
 
 
 <br/> <hr> <br/>
