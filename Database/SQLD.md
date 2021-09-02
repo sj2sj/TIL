@@ -257,19 +257,19 @@
 **3) 반정규화 방법**
 - 테이블의 반정규화
 
-![table-denormalization](./image/table-denormalization.png)
+![table-denormalization](../image/table-denormalization.png)
 
 <br>
 
 - 컬럼의 반정규화
 
-![column-denormalization](./image/column-denormalization.png)
+![column-denormalization](../image/column-denormalization.png)
 
 <br>
 
 - 관계의 반정규화
 
-![relation-denormalization](./image/relation-denormalization.png)
+![relation-denormalization](../image/relation-denormalization.png)
 
 <br> <br>
 
@@ -650,6 +650,7 @@ FROM 테이블명
 
 
 ## SQL 활용
+
 
 
 <br/><hr><br/>
