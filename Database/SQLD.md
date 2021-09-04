@@ -785,6 +785,106 @@ CONNECT BY [NOCYCLE] 조건 ...
 <br> <br>
 
 ### 그룹 함수
+> 검색된 여러 행을 이용하여 통계 정보를 계산하는 함수
 
+<br>
+
+**1) ROLLUP**
+- GROUP BY의 확장된 형태
+- 병렬로 수행하기 때문에 매우 효과적
+- 시간 및 지역처럼 계층적 분류를 포함하고 있는 데이터의 집계에 적합
+- Groupping columns의 수를 N이라고 했을 때, `N+1` Level의 Subtotal이 생성됨
+- 계층 구조이므로 순서가 바뀌면 수행결과도 바뀐다.
+
+<br>
+
+**2) CUBE**
+- 결합 가능한 모든 값에 대하여 다차원적인 집계를 생성
+- CUBE도 결과에 대한 정렬이 필요한 경우, ORDER BY절에 명시적으로 정렬 컬럼을 표시
+- ROLLUP에 비해 다양한 데이터를 얻을 수 있지만, 시스템에 부하를 많이 준다는 단점이 있다.
+
+<br>
+
+**3) GROUPING SETS**
+- 다양한 소계 집합을 만들 수 있다.
+- 계층 구조인 ROLLUP과 달리 평등한 관계이므로 인수의 순서가 바뀌어도 결과가 같다.
+
+<br> <br>
+
+### 윈도우 함수
+- 행과 행 간의 관계를 쉽게 정의하기 위해 만든 함수
+- 윈도우 함수에는 `OVER` 문구가 필수 키워드로 포함
+
+**1) 순위(RANK) 함수**
+- `RANK`: 특정 항목(컬럼) / 특정 범위(파티션) / 전체 데이터에 대한 순위를 구하는 함수 <br>
+    동일 값에 대해 동일한 순위 (다음 순위를 skip!) `ex.` 1-2-2-4...
+- `DENSE_RANK`: RANK와 흡사하나, 다음 순위를 skip하지 않음 `ex.` 1-2-2-3...
+- `ROW_NUMBER`: 동일한 값이라도 고유한 순위를 부여
+
+<br>
+
+**2) 일반 집계(AGGREGATE) 함수**
+- `SUM`: 파티션별 윈도우의 합 (같은 ORDER BY 순서 경우 합쳐서 계산)
+- `MAX`: 파티션별 윈도우의 최대값
+- `MIN`: 파티션별 윈도우의 최소값
+- `AVG`: 파티션별 윈도우의 평균값
+
+SQL Server 집계함수 OVER 절 내의 ORDER BY 구문 지원 X
+
+<br>
+
+**3) 그룹 내 행 순서 함수 [SQL Server ❌]**
+- `FIRST_VALUE`: 쿼리 결과에서 첫번째 행을 가져올때
+- `LAST_VALUE`: 쿼리 결과에서 마지막 행을 가져올때
+- `LAG`: 파티션별 윈도우에서 이전 몇 번째 행의 값
+- `LEAD`: 파티션별 윈도우에서 이후 몇 뻔째 행의 값
+
+<br>
+
+**4) 그룹 내 비율 함수 [SQL Server ❌]**
+- `CUME_DIST`
+- `PRECENT_RANK`
+- `NTILE`
+- `RATIO_TO_REPORT`
+
+<br> <br>
+
+~~~sql
+SELECT 컬럼명, 컬럼명, ...
+    WINDOW_FUNCTION (ARGUMENTS)
+    OVER ([PARTITION BY 컬럼][ORDER BY 절][WINDOWING 절]) ALIAS
+FROM 테이블명;
+~~~
+📌  PARTITION BY 절의 조건과 ORDER BY 절의 조건이 충돌 시 ORDER BY 절로 정렬함
+
+- ARGUMENTS: 함수에 따라 0~N개의 인수
+- PARTITION BY 절: 전체 집합을 기준에 의해 소그룹으로 나눔
+- ORDER BY 절: 어떤 항목에 대해 순위를 지정할지?
+- WINDOWING 절: 함수의 대상이 되는 행 기준의 범위를 간략히 지정 
+
+
+<br> <br>
+
+### PL/SQL
+<br>
+
+**PL/SQL 특징**
+1) Block 구조로 되어있어 각 기능별로 모듈화 가능
+2) 변수, 상수 등을 선언하여 SQL 문장 간 값을 교환
+3) IF, LOOP 드의 절차형 언어를 사용하여 절차적 프로그램이 가능하도록 함
+4) DBMS 정의 에러나 사용자 정의 에러를 정의하여 사용할 수 있음
+5) Oracle에 내장되어 있으므로 Oracle과 PL/SQL을 지원하는 어떤 서버로도 프로그램을 옮길 수 있다.
+6) 응용 프로그램의 성능을 향상시킴
+7) 여러 SQL 문장을 Block으로 묶고 한 번에 Block 전부를 서버로 보내기 때문에 통신량을 줄일 수 있음
+
+<br>
+
+**프로시저와 트리거**
+
+|-|프로시저|트리거|
+|-|-|-|
+|**문법**|CREATE Procedure|CREATE Trigger
+|**실행 명령어**|EXECUTE|생성 후 자동으로 실행
+|**COMMIT, ROLLBACK**|O|X
 
 <br/><hr><br/>
