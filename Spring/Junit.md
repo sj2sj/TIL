@@ -5,6 +5,13 @@
 - 자바 프로그래밍 언어용 **단위 테스트 프레임워크**
 - TDD(Test-driven development, 테스트 주도 개발)면에서 중요하다.
 
+<br>
+
+
+> ❓ 단위 테스트란 <br>
+> - 소스코드의 특정 모듈이 정확히 동작하는지 테스트하는 것
+> - 메서드에 대해 테스트 케이스를 작성하는 것
+
 
 <br><hr><br>
 
@@ -33,3 +40,14 @@
 <br><hr><br>
 
 ## 자주 사용하는 메서드
+|메서드|설명|
+|-|-|
+|assertArrayEquals(a, b)|배열 A와 B가 일치하는지 확인|
+|assertEquals(a, b)|객체 A와 B가 같은 값을 가지는지 확인|
+|assertEquals(a, b, c)|객체 A와 B가 값이 일치하는지 확인 (a: 예상 값, b: 결과 값, c: 오차 범위)|
+|assertSame(a, b)|객체 A와 B가 같은 객체인지 확인|
+|assertTrue(a)|조건 A가 참인지 확인|
+|assertNotNull(a)|객체 A가 NULL이 아닌지 확인|
+
+> 더 많은 메서드 확인<br> 
+> http://junit.sourceforge.net/javadoc/org/junit/Assert.html
